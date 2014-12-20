@@ -1,0 +1,152 @@
+BEGIN;
+BEGIN
+select
+	s_acctbal,
+	s_name,
+	n_name,
+	p_partkey,
+	p_mfgr,
+	s_address,
+	s_phone,
+	s_comment
+from
+	part,
+	supplier,
+	partsupp,
+	nation,
+	region
+where
+	p_partkey = ps_partkey
+	and s_suppkey = ps_suppkey
+	and p_size = 7
+	and p_type like '%NICKEL'
+	and s_nationkey = n_nationkey
+	and n_regionkey = r_regionkey
+	and r_name = 'AMERICA'
+	and ps_supplycost = (
+		select
+			min(ps_supplycost)
+		from
+			partsupp,
+			supplier,
+			nation,
+			region
+		where
+			p_partkey = ps_partkey
+			and s_suppkey = ps_suppkey
+			and s_nationkey = n_nationkey
+			and n_regionkey = r_regionkey
+			and r_name = 'AMERICA'
+	)
+order by
+	s_acctbal desc,
+	n_name,
+	s_name,
+	p_partkey
+LIMIT 100;
+ s_acctbal |          s_name           |          n_name           | p_partkey |          p_mfgr           |                s_address                |     s_phone     |                                              s_comment                                               
+-----------+---------------------------+---------------------------+-----------+---------------------------+-----------------------------------------+-----------------+------------------------------------------------------------------------------------------------------
+   9994.46 | Supplier#000074320        | CANADA                    |    649313 | Manufacturer#5            | pHqby4sZe byTJoaBk                      | 13-793-901-6289 |  special courts. dolphins w
+   9993.25 | Supplier#000044614        | PERU                      |    794599 | Manufacturer#1            | ccerhM3xG37YxRoYDQeoBpkDww6a5XaNJvJcXP  | 27-432-652-3792 |  the carefully regular epitaphs. carefully ironic pinto beans sleep quickly atop the bold theodo
+   9993.25 | Supplier#000044614        | PERU                      |   1119602 | Manufacturer#4            | ccerhM3xG37YxRoYDQeoBpkDww6a5XaNJvJcXP  | 27-432-652-3792 |  the carefully regular epitaphs. carefully ironic pinto beans sleep quickly atop the bold theodo
+   9992.21 | Supplier#000058243        | UNITED STATES             |    758242 | Manufacturer#5            | alB xGRXdiiTS                           | 34-898-572-3485 | evenly fluffily unusual pinto beans. furiously express ac
+   9984.84 | Supplier#000012915        | BRAZIL                    |   1962876 | Manufacturer#4            | oQag9k15dQKhpxY 80QcYX6RNcs             | 12-333-654-9126 | requests wake carefully after the blithely unusual court
+   9984.78 | Supplier#000066482        | CANADA                    |   1241469 | Manufacturer#4            | S37cy4w3iqLE                            | 13-662-729-6570 | lose ideas around the final, pending requests thrash instead of the blit
+    9984.2 | Supplier#000002331        | CANADA                    |    702330 | Manufacturer#1            | WRh2w5WFvRg7Z0S1AvSvHCL                 | 13-753-341-2617 |  the final theodolites. quickly even de
+   9983.46 | Supplier#000032463        | CANADA                    |   1507447 | Manufacturer#3            | I9yi4Wdw6vu                             | 13-749-630-9030 | hely ironic packages wake blithely. furiously bold theodolites haggle above the slyly final foxes
+   9981.67 | Supplier#000062678        | CANADA                    |    487665 | Manufacturer#4            | bp0JRn1gEGhlkJtKpptJFxPUEhKMgfo         | 13-177-391-2348 | ers. slyly even accounts wake blithely. furiously even ac
+   9975.36 | Supplier#000068136        | PERU                      |    368135 | Manufacturer#1            | ceyXDJZTZLW,rAjR3JrcPHKs3ufvNMQJkF1     | 27-857-226-7467 | ackages are. final deposits affix. express, pending asymptotes sleep slyly. regular requests 
+   9973.18 | Supplier#000091752        | BRAZIL                    |   1816697 | Manufacturer#5            | 80KVvLK6dUkoABwNGiyPFX op5CMe5bm96GQSs  | 12-711-877-1254 | re about the quickly even foxes. regular requests
+    9971.6 | Supplier#000041975        | BRAZIL                    |    916965 | Manufacturer#4            | s6WAPGbn3jHERXnFfXOI,QLhzbQIMdn         | 12-894-926-2782 | s. hockey players along the bold deposits eat silently fluffi
+   9969.88 | Supplier#000068471        | ARGENTINA                 |    293464 | Manufacturer#5            | CJv4cfp7DL                              | 11-207-990-1153 | c, final realms sleep carefully. special, even accounts are carefully agains
+   9969.28 | Supplier#000043272        | CANADA                    |    543271 | Manufacturer#1            | bRzB84hAf6ESv3BMVbBw9mN3cDCgqRqyj2FvE   | 13-682-972-9363 | . blithely bold foxes poach furiously i
+   9968.32 | Supplier#000014067        | ARGENTINA                 |   1464038 | Manufacturer#2            | MJJhDdlV68Yii0f                         | 11-279-553-5167 | l dugouts boost. blithely pending platelets are slyly along the regular pint
+   9964.42 | Supplier#000079009        | CANADA                    |   1279008 | Manufacturer#1            | oBINUBoR Pr8N5U,o,KtQZRKA9nFfWsKwYd7T5x | 13-841-791-1451 | s around the fluffily ironic
+   9961.94 | Supplier#000073308        | BRAZIL                    |   1823271 | Manufacturer#4            | PxS8y8udJ6oh                            | 12-387-954-3952 | ctions haggle. instructions use. quickly eve
+    9961.1 | Supplier#000025076        | BRAZIL                    |    925075 | Manufacturer#1            | W8mEhSu,P0WWZasaRBl8B6kc                | 12-990-509-5364 | the furiously regular accounts use slyly
+   9957.39 | Supplier#000024454        | BRAZIL                    |    224453 | Manufacturer#5            | iNb,PoZ0LXZ9XfA                         | 12-487-845-7399 | e slyly ironic accounts; carefully express packages detect slyly above the silent, express
+      9957 | Supplier#000000234        | UNITED STATES             |    525218 | Manufacturer#5            | iMrk7HUD87at3IIh4rBi                    | 34-187-193-2209 | nag furiously pending dependencies. unusual deposits integrate fur
+   9955.15 | Supplier#000039730        | CANADA                    |   1964672 | Manufacturer#2            | dhNXUet1Q96lsh35uABpZwVUz90CQY4Sl       | 13-174-394-7431 | ly even dinos are furiously fluffily even requ
+   9954.28 | Supplier#000050449        | BRAZIL                    |   1425434 | Manufacturer#2            | Q86rmIYPDA3WPH4TjVYnI1Rr3TgQ854Bur      | 12-387-814-2885 | silent foxes across the furiously final deposits cajole bli
+   9947.62 | Supplier#000059045        | ARGENTINA                 |    834036 | Manufacturer#2            | hdi5zKHmL0UDWoqA3Jl9qUGMB7CKZ1          | 11-984-172-1001 | xpress, ironic foxes around the accounts wake slyly according to the ironic accounts
+   9941.92 | Supplier#000086114        | UNITED STATES             |     36113 | Manufacturer#3            | 6t7MBUuDsHDy7bjrqkEcOWyKRNS2,,t         | 34-891-935-5945 | l dependencies cajole at the fluffily even pinto b
+   9941.92 | Supplier#000086114        | UNITED STATES             |    111110 | Manufacturer#5            | 6t7MBUuDsHDy7bjrqkEcOWyKRNS2,,t         | 34-891-935-5945 | l dependencies cajole at the fluffily even pinto b
+    9938.1 | Supplier#000083357        | ARGENTINA                 |    308347 | Manufacturer#3            | 7wb6iOHpRkgE,mqyrDzcckkexToZTR94        | 11-501-299-4731 |  silent dinos across the blithely pending ideas will have to wake carefully across the furiousl
+    9935.3 | Supplier#000036589        | PERU                      |    461576 | Manufacturer#1            | xk3tq6p,i3PRi5L2MSqZ,0IF2               | 27-141-194-4187 | ld frets. carefully bold requests sleep carefully silent pinto beans. 
+   9930.72 | Supplier#000036543        | UNITED STATES             |    161539 | Manufacturer#3            | FdfESt,aqJBPsXqQnPPTAgtARfhHBB36xOV     | 34-789-417-1136 | ar, final requests. ironic, final theodolites boost carefully above the 
+   9930.72 | Supplier#000036543        | UNITED STATES             |   1536542 | Manufacturer#5            | FdfESt,aqJBPsXqQnPPTAgtARfhHBB36xOV     | 34-789-417-1136 | ar, final requests. ironic, final theodolites boost carefully above the 
+   9929.16 | Supplier#000067927        | UNITED STATES             |    542921 | Manufacturer#4            | tT56XG,GNz2Tq,jXVJFOZ5Q7rQdK7ASul0jV    | 34-850-260-9869 | nd the final packages. dependencies are furio
+   9925.07 | Supplier#000053756        | ARGENTINA                 |    278749 | Manufacturer#3            | gClMST9RyYO8pW9Rmh6csk4T2n4fRhll0KUYLw0 | 11-467-222-4668 | warthogs are. quickly final theodolites mold slyly furiously express depos
+   9923.72 | Supplier#000055402        | CANADA                    |   1130390 | Manufacturer#3            | J1cQXfdlEOw                             | 13-807-246-2460 | ke. ideas wake slyly. regular deposits integrate carefully furiously regular pinto beans. quickly f
+   9923.64 | Supplier#000095530        | UNITED STATES             |    220523 | Manufacturer#5            | SMHglRaovkme44X2DgMfi2,4hqxH            | 34-429-175-4747 | ve the waters. silent escapades according to the carefully special packages haggle
+    9923.4 | Supplier#000058097        | ARGENTINA                 |    708082 | Manufacturer#1            | aIF4uckQFrNg7ndAi6PLqjTv1kdHVq7OqKFF    | 11-366-468-1405 | onic pinto beans after the carefully pending grouches wake express platelets. quickly even foxes 
+   9919.62 | Supplier#000002872        | UNITED STATES             |    752857 | Manufacturer#2            | MJ9iMo lUlY00f4glR                      | 34-995-365-6753 | as wake furiously regular accounts. slyly close pinto beans haggle furiousl
+   9919.62 | Supplier#000002872        | UNITED STATES             |    777864 | Manufacturer#5            | MJ9iMo lUlY00f4glR                      | 34-995-365-6753 | as wake furiously regular accounts. slyly close pinto beans haggle furiousl
+   9918.54 | Supplier#000045726        | ARGENTINA                 |   1470683 | Manufacturer#5            | N2JYKASr6U64u09Ri3n                     | 11-671-822-5610 |  furiously ironic requests 
+   9906.28 | Supplier#000068707        | PERU                      |   1943687 | Manufacturer#1            | lUc43vUum4x18cHuo5f lQre                | 27-176-762-6388 | egular dependencies haggle alongside of the carefully ironic packages
+   9903.64 | Supplier#000015446        | BRAZIL                    |   1040415 | Manufacturer#2            | i9sYe4J5FDgE045RKe5w89O                 | 12-984-174-5295 | foxes boost. pending, express theodolites are. slyly final instructions dazzle furiously ac
+   9902.23 | Supplier#000053346        | ARGENTINA                 |   1053345 | Manufacturer#5            | O9txJfcSJj1pFvSb4fQrd                   | 11-962-527-1793 | even packages serve. deposits near 
+   9900.18 | Supplier#000079278        | PERU                      |   1254265 | Manufacturer#5            | yG7LSwpRLYCqwtCr5G                      | 27-493-597-6576 | al foxes. instructions serve quickly speci
+   9900.18 | Supplier#000079278        | PERU                      |   1554262 | Manufacturer#4            | yG7LSwpRLYCqwtCr5G                      | 27-493-597-6576 | al foxes. instructions serve quickly speci
+   9899.27 | Supplier#000085097        | ARGENTINA                 |   1535066 | Manufacturer#5            | EZu6rjQiM3JhB861dOWWZQs3lGkvbYryI       | 11-339-368-8275 | ial deposits wake blithely alongside of the even excuses. deposits alongside of the pint
+   9896.86 | Supplier#000060914        | UNITED STATES             |   1035903 | Manufacturer#4            | Oo2PLDmWuMj1LPL92yJHYxvGKpQ             | 34-116-998-1488 | regular forges haggle against the carefully pending theodolites. fluffily bold accou
+   9892.39 | Supplier#000095266        | BRAZIL                    |   1570250 | Manufacturer#3            | a0YL8NgNzK                              | 12-606-558-5332 | ove the furiously unusual packages. slyly bold pinto beans sleep furiously 
+   9890.37 | Supplier#000095610        | ARGENTINA                 |    545599 | Manufacturer#5            | M03Gi zVzBLegBxUwgL4UrE0tFao1l80jMsjE2Q | 11-700-164-6592 | ect regular requests. unusual foxes breach over t
+   9890.37 | Supplier#000095610        | ARGENTINA                 |   1120576 | Manufacturer#2            | M03Gi zVzBLegBxUwgL4UrE0tFao1l80jMsjE2Q | 11-700-164-6592 | ect regular requests. unusual foxes breach over t
+    9888.5 | Supplier#000036179        | ARGENTINA                 |    936178 | Manufacturer#1            | 9czMHL 6g8A3pJXyvTQVRbu6sY4QwCXXBi      | 11-585-131-1356 | y bold deposits are blithely final packages. deposits wake sl
+   9883.15 | Supplier#000022952        | ARGENTINA                 |   1947894 | Manufacturer#4            | 3H7k,r60KXMlm3rMCFvcU7IMfPBM06rC3       | 11-526-851-5636 |  wake furiously regular ideas. blithely ruthless theodolites are furiously blithely even 
+   9870.19 | Supplier#000062690        | BRAZIL                    |    862689 | Manufacturer#5            | MZGnx2SJujAfNzGDjo                      | 12-818-686-5219 | tipliers after the fluffily bold platelets are up the blithe
+   9869.77 | Supplier#000040712        | BRAZIL                    |    515706 | Manufacturer#4            | kav,22dbgJxw8JpiDfXx0eoHj773cGhh        | 12-670-682-1819 | integrate blithely. never ironic packages along the ironic
+   9864.83 | Supplier#000076826        | UNITED STATES             |    276825 | Manufacturer#4            | wRQ5tU5V0Ei9unIsHkI                     | 34-544-588-8251 |  pinto beans wake about the furiously final deposits. quickly even requests affix at the furiousl
+   9857.03 | Supplier#000084110        | UNITED STATES             |     84109 | Manufacturer#4            | qMSxmMdeYoMJ,                           | 34-622-943-2069 | s. furiously final dependencies against the even sentiments are fluffily among the fur
+   9856.01 | Supplier#000040367        | CANADA                    |    490358 | Manufacturer#5            | 1avBjyMY,vMinSmuI,5A6FXt9vqe nEH95      | 13-653-551-8341 | sly regular dependencies wake blithely after the r
+   9854.95 | Supplier#000057545        | UNITED STATES             |    432540 | Manufacturer#1            | QjDZKsyJbDVNiFv                         | 34-802-840-7046 | lly according to the pending, ironic ideas.
+   9853.52 | Supplier#000089012        | BRAZIL                    |    838995 | Manufacturer#3            | 2icThBHhxWZ                             | 12-335-368-8781 | ven, unusual foxes print. blithely regular platelets affix slyly above the
+   9852.58 | Supplier#000061256        | UNITED STATES             |    111253 | Manufacturer#4            | lgOxqDF1rypJtiCzP0Xxni WmtZ             | 34-758-715-1231 | olites. special, regular accounts hang carefully express foxes
+   9848.63 | Supplier#000067704        | CANADA                    |    642697 | Manufacturer#1            | 2UhXwdUkZQ4ISw20Pm46RMI2ytuW3S2XSSD     | 13-279-368-8661 | final tithes wake furiously 
+   9848.15 | Supplier#000061793        | BRAZIL                    |    286786 | Manufacturer#1            | 4Zot05ag8B,M5b1dj5r7z3NcpKc0IGItd       | 12-477-729-1485 | al instructions are slyly 
+   9846.08 | Supplier#000046083        | ARGENTINA                 |    646082 | Manufacturer#1            | v469PAg3p0LuNBNuLBiDEA10J4d3x8CzpgvBjlC | 11-993-757-6987 | eep slyly. carefully final requests wake blithely regular ideas. furiously p
+   9846.08 | Supplier#000046083        | ARGENTINA                 |    796068 | Manufacturer#4            | v469PAg3p0LuNBNuLBiDEA10J4d3x8CzpgvBjlC | 11-993-757-6987 | eep slyly. carefully final requests wake blithely regular ideas. furiously p
+   9845.83 | Supplier#000091004        | PERU                      |    266001 | Manufacturer#2            | zoewWP2exbJ                             | 27-142-136-9166 | regular, regular theodolites nod according to the caref
+   9845.78 | Supplier#000097352        | BRAZIL                    |   1097351 | Manufacturer#3            | nIxCPnoc5TNKgRr0                        | 12-974-499-4951 |  dependencies. fluffily even grouches ab
+    9841.8 | Supplier#000090533        | PERU                      |    190532 | Manufacturer#1            | 2rrut6wkOxq6QcHWEyct YIw8O3Z58pjlHnfPj  | 27-873-338-8478 | even requests. blithely bold instructions nod. furiously express accoun
+   9841.07 | Supplier#000036907        | PERU                      |    611900 | Manufacturer#3            | tLHR1Tc z38aKSLyo91YC297TiX             | 27-879-189-8023 | efully even packages. quickly regu
+   9838.81 | Supplier#000089876        | CANADA                    |    189875 | Manufacturer#1            | f0o1,9xA62w3wBfeAQG7I8Y39qIPGIix,uf     | 13-579-960-6948 | lets boost about the requests. bold requests sleep fluffily alongsid
+   9837.42 | Supplier#000080378        | ARGENTINA                 |    430369 | Manufacturer#1            | ,OBwkS8qLZZwcwqSH RXMlZvvUL2H5OdM9      | 11-484-778-1822 |  detect. ideas boost regular deposits. iron
+   9837.26 | Supplier#000015876        | ARGENTINA                 |   1415875 | Manufacturer#2            | PKLY2b0ocECmiO                          | 11-905-564-6763 | pinto beans. quickly final packages wake slyly special deposits
+   9827.98 | Supplier#000072985        | ARGENTINA                 |    322978 | Manufacturer#2            | 9pMQ Mi0Z qa,ZmIt4Y                     | 11-459-514-3115 | nstructions was furiously fluffily final packages. carefully unusual packages 
+   9827.43 | Supplier#000072361        | PERU                      |   1797309 | Manufacturer#3            | ae67FUOHNI5lHltXciHG                    | 27-394-720-5434 | . blithely ironic requests kindle blithely. carefu
+   9826.29 | Supplier#000054754        | PERU                      |   1179720 | Manufacturer#5            | mwiz,wLGgc3R9jMGKfZsmYJoutnJjMfveQNQYE  | 27-125-877-6341 |  slyly about the final instructions. slyly express 
+   9822.37 | Supplier#000063644        | PERU                      |    338640 | Manufacturer#4            | Npw,qgafmrgx9CH,8VPsXcaga0              | 27-487-590-7763 | to beans haggle furiously regular, pending deposits. regular somas sleep blithely along the carefu
+   9818.67 | Supplier#000064563        | ARGENTINA                 |    564562 | Manufacturer#2            | DKKZwsJ0HY1OwNLqHP2x                    | 11-946-792-6266 | olites at the slowly express requests haggle carefully according to the fluffily silent accounts
+   9817.06 | Supplier#000016361        | UNITED STATES             |   1641312 | Manufacturer#3            | 8n,vpUBgTvR0khKi,BuGTAOgOISss           | 34-764-918-8025 |  engage blithely even foxes: blithely unusua
+   9810.71 | Supplier#000026149        | PERU                      |    451136 | Manufacturer#5            | IYG7P4soFeWQISry                        | 27-824-467-6341 | ly. blithely even packages sleep slyly quickly pending packages
+   9808.37 | Supplier#000077401        | PERU                      |   1627368 | Manufacturer#4            | Um1QS,1yS4NaO9jaMgsNitsSrRnc            | 27-269-969-4131 | refully. slyly special courts across the sentiments are closely fu
+   9807.39 | Supplier#000067891        | PERU                      |   1792839 | Manufacturer#3            | RVLQ c3H1zT8Tmgp8xL                     | 27-507-607-9957 | usly ironic requests sublate slyly sly packages. slyly regular requests be
+   9806.83 | Supplier#000020603        | CANADA                    |   1595587 | Manufacturer#5            | 03oUnrvTpssy22hq3uDJWUdH52VxSuYrbE8     | 13-333-408-4005 | as eat blithely quickly silent fo
+   9804.43 | Supplier#000087084        | ARGENTINA                 |    737069 | Manufacturer#2            | adWCeOnVHmnYYkHnS                       | 11-954-447-1992 | rate according to the unusual instructions. furiously unusual requests
+   9803.42 | Supplier#000043566        | CANADA                    |   1768514 | Manufacturer#4            |  U,azwuyit,qPrKqPpzNhXghKKJ             | 13-959-837-4409 | ng requests cajole quickl
+   9796.32 | Supplier#000011064        | ARGENTINA                 |   1486049 | Manufacturer#5            | i,,2sV20NnRVUEbe                        | 11-230-949-2847 | sleep carefully furiously regular deposits. furiously silent
+   9794.41 | Supplier#000049024        | ARGENTINA                 |    999005 | Manufacturer#2            | M6p77SQWhBt6VUKn5N8gxQpoNbhP            | 11-218-991-1980 | s cajole. slyly regular requests sleep carefully along the even pinto beans. c
+    9791.9 | Supplier#000055141        | UNITED STATES             |   1455140 | Manufacturer#1            | S5d3k3hVylKjhO26uj6Be11z1q3Awi          | 34-189-654-5110 |  ironic excuses. furiously regular accounts cajole. accou
+   9790.21 | Supplier#000091064        | BRAZIL                    |   1941025 | Manufacturer#1            | 2xISkKWWhNwn3i4,peNwnK8AAx7aqWpuUmiBpq  | 12-300-100-3239 | cross the enticing, pending asympt
+   9785.97 | Supplier#000012587        | CANADA                    |    137583 | Manufacturer#1            | S NwkjeH1KMXt4AkIYkTac4p9MygrlenmlE     | 13-910-282-8572 | use furiously furiously final deposits. deposits sublate across the regular requests. blithely ex
+   9784.49 | Supplier#000093403        | BRAZIL                    |    718381 | Manufacturer#2            | tGQfJhDAp1D4IDBmLokbl                   | 12-950-961-2027 | affix above the furiously ironic accounts. brave packages cajole. furi
+   9783.76 | Supplier#000064329        | CANADA                    |     64328 | Manufacturer#5            | SMCC,Kxm,YyUPP7bpH                      | 13-269-796-9658 | t the carefully ironic pinto beans are after the pinto beans. furiously unusual foxes use quickly. p
+   9782.71 | Supplier#000015646        | CANADA                    |    915645 | Manufacturer#1            | QoGgEFn4NqX6tpi1p7G                     | 13-125-730-8150 | unusual instructions. quickl
+   9776.94 | Supplier#000046815        | ARGENTINA                 |     96814 | Manufacturer#1            | RORB8hTB3kdu0n,CBWXN0Mn8vAO3pfxiqRYI    | 11-278-225-6808 |  the ironic platelets boost blithely slyly final platelets! quickly ironic pac
+   9776.94 | Supplier#000046815        | ARGENTINA                 |   1996776 | Manufacturer#4            | RORB8hTB3kdu0n,CBWXN0Mn8vAO3pfxiqRYI    | 11-278-225-6808 |  the ironic platelets boost blithely slyly final platelets! quickly ironic pac
+   9776.74 | Supplier#000074919        | ARGENTINA                 |   1049908 | Manufacturer#2            | XGWyJtNcDnRakRYwBGF2Gv9wm50rtkr4JtVO,8  | 11-825-307-8254 |  platelets integrate furiously. slyly
+   9776.11 | Supplier#000099543        | BRAZIL                    |    899542 | Manufacturer#2            | A7RJ,I1Z5C2qJzgBuNKlbOX                 | 12-417-869-1369 | ideas. even requests sleep according to the ironic deposits. theodol
+   9775.87 | Supplier#000035812        | PERU                      |    510806 | Manufacturer#3            | rQe,aIoIgzajKZTIofSzpktE                | 27-170-567-2265 | after the blithely ironic frays play after the thinly final
+   9773.19 | Supplier#000082593        | CANADA                    |   1082592 | Manufacturer#5            | BCKmnNo5OlBoGbqhi4JL1foChtLddXB4InNUSe  | 13-233-500-1045 | s sleep fluffily alongside of the slyly unusual braids. sl
+   9770.88 | Supplier#000046918        | BRAZIL                    |     96917 | Manufacturer#2            | 6o5e8WpRAFKAeNUB9llQZ08APn2Rr1F         | 12-515-646-4924 | al foxes must have to hinder quickly! final theodolites integrate express packages. excuses integr
+   9770.45 | Supplier#000027549        | ARGENTINA                 |    727548 | Manufacturer#3            | xhDWq4AedxhZAKoQh1tVDBJVq03u Pgqzel     | 11-886-903-3833 | inal, ironic requests cajole idly platelets: slow accounts cajole fluffily blithely enticing de
+   9769.31 | Supplier#000007184        | ARGENTINA                 |      7183 | Manufacturer#5            | AKfsS0cnFq64dK                          | 11-750-116-8427 | ily blithely regular packages. fluffi
+   9769.31 | Supplier#000007184        | ARGENTINA                 |   1832129 | Manufacturer#1            | AKfsS0cnFq64dK                          | 11-750-116-8427 | ily blithely regular packages. fluffi
+   9768.87 | Supplier#000020583        | BRAZIL                    |   1945525 | Manufacturer#1            | eg62ss,9TFKBM71E,LOw0Dn7VD87d           | 12-447-768-1270 | pecial deposits. carefully regular packages are blithely besides
+   9756.13 | Supplier#000096140        | PERU                      |    471135 | Manufacturer#5            | phYbo Fw7HRC                            | 27-152-890-6139 | efully even packages print even packages. slyly unusual hockey players caj
+(100 rows)
+
+COMMIT;
+COMMIT

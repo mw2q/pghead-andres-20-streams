@@ -1,0 +1,51 @@
+BEGIN;
+BEGIN
+select
+	supp_nation,
+	cust_nation,
+	l_year,
+	sum(volume) as revenue
+from
+	(
+		select
+			n1.n_name as supp_nation,
+			n2.n_name as cust_nation,
+			extract(year from l_shipdate) as l_year,
+			l_extendedprice * (1 - l_discount) as volume
+		from
+			supplier,
+			lineitem,
+			orders,
+			customer,
+			nation n1,
+			nation n2
+		where
+			s_suppkey = l_suppkey
+			and o_orderkey = l_orderkey
+			and c_custkey = o_custkey
+			and s_nationkey = n1.n_nationkey
+			and c_nationkey = n2.n_nationkey
+			and (
+				(n1.n_name = 'ETHIOPIA' and n2.n_name = 'CHINA')
+				or (n1.n_name = 'CHINA' and n2.n_name = 'ETHIOPIA')
+			)
+			and l_shipdate between date '1995-01-01' and date '1996-12-31'
+	) as shipping
+group by
+	supp_nation,
+	cust_nation,
+	l_year
+order by
+	supp_nation,
+	cust_nation,
+	l_year;
+        supp_nation        |        cust_nation        | l_year |     revenue      
+---------------------------+---------------------------+--------+------------------
+ CHINA                     | ETHIOPIA                  |   1995 | 538851285.784608
+ CHINA                     | ETHIOPIA                  |   1996 | 533074741.308131
+ ETHIOPIA                  | CHINA                     |   1995 | 519039094.656579
+ ETHIOPIA                  | CHINA                     |   1996 | 508481183.150677
+(4 rows)
+
+COMMIT;
+COMMIT

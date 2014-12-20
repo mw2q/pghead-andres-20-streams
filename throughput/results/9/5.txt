@@ -1,0 +1,37 @@
+BEGIN;
+BEGIN
+select
+	n_name,
+	sum(l_extendedprice * (1 - l_discount)) as revenue
+from
+	customer,
+	orders,
+	lineitem,
+	supplier,
+	nation,
+	region
+where
+	c_custkey = o_custkey
+	and l_orderkey = o_orderkey
+	and l_suppkey = s_suppkey
+	and c_nationkey = s_nationkey
+	and s_nationkey = n_nationkey
+	and n_regionkey = r_regionkey
+	and r_name = 'AFRICA'
+	and o_orderdate >= date '1994-01-01'
+	and o_orderdate < date '1994-01-01' + interval '1 year'
+group by
+	n_name
+order by
+	revenue desc;
+          n_name           |     revenue      
+---------------------------+------------------
+ ETHIOPIA                  |  529995554.59993
+ KENYA                     | 529243873.164646
+ MOROCCO                   | 526182319.092295
+ MOZAMBIQUE                | 525438269.562108
+ ALGERIA                   | 524683375.038361
+(5 rows)
+
+COMMIT;
+COMMIT

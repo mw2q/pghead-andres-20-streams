@@ -1,0 +1,65 @@
+BEGIN;
+BEGIN
+EXPLAIN
+select
+	cntrycode,
+	count(*) as numcust,
+	sum(c_acctbal) as totacctbal
+from
+	(
+		select
+			substr(c_phone, 1, 2) as cntrycode,
+			c_acctbal
+		from
+			customer
+		where
+			substr(c_phone, 1, 2) in
+				('29', '32', '21', '22', '13', '25', '23')
+			and c_acctbal > (
+				select
+					avg(c_acctbal)
+				from
+					customer
+				where
+					c_acctbal > 0.00
+					and substr(c_phone, 1, 2) in
+						('29', '32', '21', '22', '13', '25', '23')
+			)
+			and not exists (
+				select
+					*
+				from
+					orders
+				where
+					o_custkey = c_custkey
+			)
+	) as vip
+group by
+	cntrycode
+order by
+	cntrycode;
+                                                                   QUERY PLAN                                                                   
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=690496.51..690496.52 rows=3 width=20)
+   Sort Key: (substr((customer.c_phone)::text, 1, 2))
+   InitPlan 1 (returns $0)
+     ->  Aggregate  (cost=52871.45..52871.46 rows=1 width=4)
+           ->  Bitmap Heap Scan on customer customer_1  (cost=6639.72..51918.95 rows=380999 width=4)
+                 Recheck Cond: ((substr((c_phone)::text, 1, 2) = ANY ('{29,32,21,22,13,25,23}'::text[])) AND (c_acctbal > 0::double precision))
+                 ->  Bitmap Index Scan on customer_c_phone_idx_c_acctbal  (cost=0.00..6544.47 rows=380999 width=0)
+                       Index Cond: (substr((c_phone)::text, 1, 2) = ANY ('{29,32,21,22,13,25,23}'::text[]))
+   ->  HashAggregate  (cost=637624.99..637625.03 rows=3 width=20)
+         Group Key: substr((customer.c_phone)::text, 1, 2)
+         ->  Hash Anti Join  (cost=594266.85..637182.96 rows=58937 width=20)
+               Hash Cond: (customer.c_custkey = orders.o_custkey)
+               ->  Bitmap Heap Scan on customer  (cost=2907.71..41854.75 rows=139773 width=24)
+                     Recheck Cond: ((substr((c_phone)::text, 1, 2) = ANY ('{29,32,21,22,13,25,23}'::text[])) AND (c_acctbal > $0))
+                     ->  Bitmap Index Scan on customer_c_phone_idx  (cost=0.00..2872.76 rows=139773 width=0)
+                           Index Cond: ((substr((c_phone)::text, 1, 2) = ANY ('{29,32,21,22,13,25,23}'::text[])) AND (c_acctbal > $0))
+               ->  Hash  (cost=403671.84..403671.84 rows=15014984 width=4)
+                     ->  Seq Scan on orders  (cost=0.00..403671.84 rows=15014984 width=4)
+ Planning time: 1.909 ms
+(19 rows)
+
+COMMIT;
+COMMIT
